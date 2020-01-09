@@ -149,9 +149,13 @@ function ConvertFrom-SID {
                     $objSID = New-Object System.Security.Principal.SecurityIdentifier($id)
                     $name = ( $objSID.Translate([System.Security.Principal.NTAccount]) ).Value
                 }
+                Catch [System.Security.Principal.IdentityNotMappedException] {
+                  $name = "Not a valid SID. Could not be mapped to an user account"
+                  Write-Verbose "$id is not a valid SID. $id could not be mapped to a user account."
+                }
                 Catch{
                     $name = "Not a valid SID or could not be identified"
-                    Write-Verbose "$id is not a valid SID or could not be identified"
+                    Write-Verbose "$id is not a valid SID or could not be identified due to a system error"
                 }
             }
 
